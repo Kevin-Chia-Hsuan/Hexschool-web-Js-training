@@ -369,6 +369,7 @@ body {
 }
 
 .inputQuantity {
+  -webkit-appearance : none;
   width: 30px;
   text-align: center;
 }
