@@ -363,13 +363,13 @@ body {
 
 .removeItem,
 .addItem {
-  -webkit-appearance : none;
+  /* -webkit-appearance : none; */
   width: 30px;
   text-align: center;
 }
 
 .inputQuantity {
-  -webkit-appearance : none;
+  /* -webkit-appearance : none; */
   width: 30px;
   text-align: center;
 }
