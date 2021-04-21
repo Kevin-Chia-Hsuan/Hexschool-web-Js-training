@@ -1,14 +1,14 @@
-// console.log(api_path);
+// console.log(apiPath);
 // console.log(token);
 
 // 前台產品列表
-const productUrl = `https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/products`;
+const productUrl = `https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${apiPath}/products`;
 // 前台購物車列表
-const cartListUrl = `https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/carts`;
+const cartListUrl = `https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${apiPath}/carts`;
 // 前台增加訂單列表
-const addOrderUrl = `https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/orders`;
+const addOrderUrl = `https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${apiPath}/orders`;
 // 後臺訂單
-const OrderUrl = `https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${api_path}/orders`;
+const orderUrl = `https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${apiPath}/orders`;
 
 // 購物車相關
 let productData = [];
@@ -36,13 +36,16 @@ function init() {
 
 // 取得產品列表函式
 function getProductList() {
-  axios.get(productUrl).then(function (response) {
-    // console.log(response.data);
-    productData = response.data.products;
-    renderProductList(productData);
-  }).catch(function (error) {
-    console.log(error);
-  })
+  axios
+    .get(productUrl)
+    .then(function (response) {
+      // console.log(response.data);
+      productData = response.data.products;
+      renderProductList(productData);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 }
 
 // 產品資料渲染
@@ -87,33 +90,36 @@ productSelect.addEventListener("change", function (e) {
 
 // 取得購物車列表
 function getCartList() {
-  axios.get(cartListUrl).then(function (response) {
-    cartListData = response.data.carts;
-    // console.log(cartListData);
-    RenderCartList(cartListData);
-  })
+  axios
+    .get(cartListUrl)
+    .then(function (response) {
+      cartListData = response.data.carts;
+      // console.log(cartListData);
+      renderCartList(cartListData);
+    })
     .then(function () {
       // 取得每個品項的減號
-      const removeItem = document.querySelectorAll('.removeItem');
+      const removeItem = document.querySelectorAll(".removeItem");
       removeItem.forEach(function (item) {
-        item.addEventListener('click', function (e) {
-          updateCartNum('remove', e);
+        item.addEventListener("click", function (e) {
+          updateCartNum("remove", e);
         });
-      })
+      });
       // 取得每個品項的加號
-      const addItem = document.querySelectorAll('.addItem');
+      const addItem = document.querySelectorAll(".addItem");
       addItem.forEach(function (item) {
-        item.addEventListener('click', function (e) {
-          updateCartNum('add', e);
+        item.addEventListener("click", function (e) {
+          updateCartNum("add", e);
         });
-      })
-    }).catch(function (error) {
-      console.log(error);
+      });
     })
+    .catch(function (error) {
+      console.log(error);
+    });
 }
 
 // 將渲染購物車列表獨立一個function
-function RenderCartList(data) {
+function renderCartList(data) {
   // console.log(data.length);
   let dataLen = data.length;
   let str = "";
@@ -212,9 +218,10 @@ function addCartItem(id) {
       swal("成功!", "加入購物車成功", "success");
       // 取得購物車列表
       getCartList();
-    }).catch(function (error) {
-      console.log(error);
     })
+    .catch(function (error) {
+      console.log(error);
+    });
 }
 
 function updateCartNum(status, e) {
@@ -228,20 +235,19 @@ function updateCartNum(status, e) {
   // 或使用這種宣告寫法
   let num = Number(document.querySelector(`[id='${id}']`).value);
   // console.log(num);
-  if (status === 'add') {
+  if (status === "add") {
     num += 1;
   } else {
-    if (num > 1) {
-      num -= 1;
-    }
+    num -= 1;
   }
   const data = {
     data: {
       id,
-      quantity: num
-    }
-  }
-  axios.patch(cartListUrl, data)
+      quantity: num,
+    },
+  };
+  axios
+    .patch(cartListUrl, data)
     .then(function (response) {
       // console.log(response);
       // 取得購物車列表
@@ -249,7 +255,7 @@ function updateCartNum(status, e) {
     })
     .catch(function (error) {
       console.log(error);
-    })
+    });
 }
 
 // 監聽產品列表刪除購物車
@@ -273,18 +279,21 @@ cartList.addEventListener("click", function (e) {
 
 // 刪除購物車內特定產品
 function deleteCartItem(cartId) {
-  axios.delete(`${cartListUrl}/${cartId}`).then(function (response) {
-    // console.log(response);
-    // alert("刪除購物車成功");
-    swal("成功!", "刪除購物車成功", "success");
-    // 取得購物車列表
-    // 直接使用response的資訊帶參數執行渲染購物車列表的function，減少 request
-    cartListData = response.data.carts;
-    // console.log(cartListData);
-    RenderCartList(cartListData);
-  }).catch(function (error) {
-    console.log(error);
-  })
+  axios
+    .delete(`${cartListUrl}/${cartId}`)
+    .then(function (response) {
+      // console.log(response);
+      // alert("刪除購物車成功");
+      swal("成功!", "刪除購物車成功", "success");
+      // 取得購物車列表
+      // 直接使用response的資訊帶參數執行渲染購物車列表的function，減少 request
+      cartListData = response.data.carts;
+      // console.log(cartListData);
+      renderCartList(cartListData);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 }
 
 // 監聽刪除全部購物車按鈕
@@ -294,7 +303,6 @@ cartList.addEventListener("click", function (e) {
   if (discardAllBtn === "discardAllBtn") {
     // console.log(discardAllBtn);
     deleteAllCartList();
-    return;
   }
   // console.log("沒點擊到刪除所有品項按鈕");
 });
@@ -310,12 +318,12 @@ function deleteAllCartList() {
       // 直接使用response的資訊帶參數執行渲染購物車列表的function，減少 request
       cartListData = response.data.carts;
       // console.log(cartListData);
-      RenderCartList(cartListData);
+      renderCartList(cartListData);
     })
     // 購物車沒內容時，使用catch捕捉錯誤
     .catch(function (error) {
       console.log(error);
-    })
+    });
 }
 
 // form表單
@@ -331,11 +339,13 @@ orderInfoBtn.addEventListener("click", function (e) {
   // 送出訂單DOM
   // 在全域宣告的畫會取到空字串，因為在全域取值的話，代表一進來就會執行，因此當時會是空的 value，取到空字串賦予給變數，那變數就是空字串
   // 若要在全域宣告的話要將const customerName = document.querySelector("#customerName")寫在全域，監聽內寫customerName.value即可
-  const customerName = document.querySelector("#customerName").value;
-  const customerPhone = document.querySelector("#customerPhone").value;
-  const customerEmail = document.querySelector("#customerEmail").value;
-  const customerAddress = document.querySelector("#customerAddress").value;
-  const tradeWay = document.querySelector("#tradeWay").value;
+  const customerName = document.querySelector("#customerName").value.trim();
+  const customerPhone = document.querySelector("#customerPhone").value.trim();
+  const customerEmail = document.querySelector("#customerEmail").value.trim();
+  const customerAddress = document.querySelector("#customerAddress").value.trim();
+  const tradeWay = document.querySelector("#tradeWay").value.trim();
+  let dmPhone = `[data-message="電話"]`;
+  let dmMail = `[data-message="Email"]`;
   //   console.log(customerName);
   if (cartLength == 0) {
     // alert("請加入至少一個購物車品項");
@@ -359,27 +369,29 @@ orderInfoBtn.addEventListener("click", function (e) {
   const reCellPhone = /^[09]{2}[0-9]{8}$/;
   // 電子信箱格式: 需要含有@及.即可
   const reMail = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-  if (!rePhone.test(customerPhone) && !reCellPhone.test(customerPhone) && !reMail.test(customerEmail)) {
-    document.querySelector(`[data-message="電話"]`).textContent =
+  if (
+    !rePhone.test(customerPhone) &&
+    !reCellPhone.test(customerPhone) &&
+    !reMail.test(customerEmail)
+  ) {
+    document.querySelector(`${dmPhone}`).textContent =
       "電話格式不正確，0X-XXXXXXXX 或 09XXXXXXXX";
-    document.querySelector(`[data-message="Email"]`).textContent =
+    document.querySelector(`${dmMail}`).textContent =
       "格式不正確，電子郵件地址必須包括 ( @ 和 . )";
     return;
   }
   if (!rePhone.test(customerPhone) && !reCellPhone.test(customerPhone)) {
     // alert("市內電話或手機號碼格式不正確，請重新輸入");
-    document.querySelector(`[data-message="電話"]`).textContent =
+    document.querySelector(`${dmPhone}`).textContent =
       "電話格式不正確，0X-XXXXXXXX 或 09XXXXXXXX";
-    document.querySelector(`[data-message="Email"]`).textContent =
-      "正確";
+    document.querySelector(`${dmMail}`).textContent = "正確";
     return;
   }
   if (!reMail.test(customerEmail)) {
     // alert("格式不正確，電子郵件地址必須包括 ( @ 和 . )");
-    document.querySelector(`[data-message="Email"]`).textContent =
+    document.querySelector(`${dmMail}`).textContent =
       "格式不正確，電子郵件地址必須包括 ( @ 和 . )";
-    document.querySelector(`[data-message="電話"]`).textContent =
-      "正確";
+    document.querySelector(`${dmPhone}`).textContent = "正確";
     return;
   }
   //   alert("訂單送出成功");
@@ -388,7 +400,7 @@ orderInfoBtn.addEventListener("click", function (e) {
   orderData = {
     name: customerName,
     tel: customerPhone,
-    Email: customerEmail,
+    email: customerEmail,
     address: customerAddress,
     payment: tradeWay,
   };
@@ -398,15 +410,9 @@ orderInfoBtn.addEventListener("click", function (e) {
 // 送出購買訂單
 function creatOrderList(item) {
   axios
-    .post(OrderUrl, {
+    .post(orderUrl, {
       data: {
-        user: {
-          name: item.name,
-          tel: item.tel,
-          email: item.Email,
-          address: item.address,
-          payment: item.payment,
-        },
+        user: item,
       },
     })
     .then(function (response) {
@@ -419,9 +425,10 @@ function creatOrderList(item) {
       // 電話、Email恢復必填資訊
       document.querySelector(`[data-message="電話"]`).textContent = "必填";
       document.querySelector(`[data-message="Email"]`).textContent = "必填";
-    }).catch(function (error) {
-      console.log(error);
     })
+    .catch(function (error) {
+      console.log(error);
+    });
 }
 
 // 執行初始化

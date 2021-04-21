@@ -1,5 +1,5 @@
 // 後臺訂單
-const OrderUrl = `https://hexschoollivejs.herokuapp.com/api/livejs/v1/admin/${api_path}/orders`;
+const OrderUrl = `https://hexschoollivejs.herokuapp.com/api/livejs/v1/admin/${apiPath}/orders`;
 
 // 訂單相關
 let orderData = [];
@@ -27,8 +27,8 @@ function renderC3(data) {
       } else {
         total[productItem.category] += productItem.price * productItem.quantity;
       }
-    })
-  })
+    });
+  });
   // console.log(total);
   // 做出資料關聯
   let categoryAry = Object.keys(total);
@@ -39,19 +39,19 @@ function renderC3(data) {
     ary.push(item);
     ary.push(total[item]);
     newData.push(ary);
-  })
+  });
   // console.log(newData);
   let chart = c3.generate({
-    bindto: '#chart', // HTML 元素綁定
+    bindto: "#chart", // HTML 元素綁定
     data: {
       type: "pie",
       columns: newData,
       colors: {
-        "窗簾": "#DACBFF",
-        "收納": "#9D7FEA",
-        "床架": "#5434A7",
+        窗簾: "#DACBFF",
+        收納: "#9D7FEA",
+        床架: "#5434A7",
         // "其他": "#301E5F",
-      }
+      },
     },
   });
 }
@@ -67,8 +67,8 @@ function renderC3LV2(data) {
       } else {
         obj[productItem.title] += productItem.price * productItem.quantity;
       }
-    })
-  })
+    });
+  });
   // console.log(total);
 
   // 做出資料關聯
@@ -80,14 +80,14 @@ function renderC3LV2(data) {
     ary.push(item);
     ary.push(obj[item]);
     rankSortAry.push(ary);
-  })
+  });
   // console.log(rankSortAry);
 
   // 比大小，降冪排序(目的：取營收前三高的產品當作主色塊，其他剩餘品項加總成一個色塊顯示)
   rankSortAry.sort(function (a, b) {
     // a[1]、b[1] 是因為要取陣列的第2筆資料，也就是金額來作為排序比較的值，由大到小，所以是b[1] - a[1]
     return b[1] - a[1];
-  })
+  });
   // console.log(rankSortAry);
   // 如果超過4筆以上，就統整為其他區塊
   let len = rankSortAry.length;
@@ -99,40 +99,38 @@ function renderC3LV2(data) {
       if (index > 2) {
         otherTotal += rankSortAry[index][1];
       }
-    })
+    });
     // 從第4筆資料開始移除
-    rankSortAry.splice(3, rankSortAry.length - 1);
+    rankSortAry.splice(3, len - 1);
     // 新增一個其他資料，並把加總金額也一同push進去
-    rankSortAry.push(['其他', otherTotal]);
+    rankSortAry.push(["其他", otherTotal]);
   }
 
   // C3程式碼
   let chart = c3.generate({
-    bindto: '#chart', // HTML 元素綁定
+    bindto: "#chart", // HTML 元素綁定
     data: {
       type: "pie",
       columns: rankSortAry,
     },
     color: {
-      pattern: ["#301E5F", "#5434A7", "#9D7FEA", "#DACBFF"]
-    }
+      pattern: ["#301E5F", "#5434A7", "#9D7FEA", "#DACBFF"],
+    },
   });
 }
 
 // 取得訂單列表
 function getOrderList() {
-  axios
-    .get(OrderUrl, token)
-    .then(function (response) {
-      orderData = response.data.orders;
-      // 不可在此處重新排序，應該要在渲染時重新排序才對
-      // 將orderData按照createdAt值重新依序排序
-      // orderData = orderData.sort(function (a, b) {
-      //   return a.createdAt > b.createdAt ? 1 : -1;
-      // });
-      // console.log(orderData);
-      renderOrderList(orderData);
-    });
+  axios.get(OrderUrl, token).then(function (response) {
+    orderData = response.data.orders;
+    // 不可在此處重新排序，應該要在渲染時重新排序才對
+    // 將orderData按照createdAt值重新依序排序
+    // orderData = orderData.sort(function (a, b) {
+    //   return a.createdAt > b.createdAt ? 1 : -1;
+    // });
+    // console.log(orderData);
+    renderOrderList(orderData);
+  });
 }
 
 // 資料渲染
@@ -164,7 +162,7 @@ function renderOrderList(data) {
     //   status = "已確認";
     // }
     // 改為三元運算子寫法
-    status = (item.paid == false) ? "未確認" : "已確認";
+    status = !item.paid ? "未確認" : "已確認";
 
     // 組訂單字串
     str += `<tr>
@@ -211,21 +209,35 @@ orderList.addEventListener("click", function (e) {
   let paidStatus = e.target.getAttribute("data-paid");
   // console.log(orderId);
   // console.log(paidStatus);
+  // if (confirmOrderBtn === "confirmOrderBtn" && paidStatus == "false") {
+  //   // alert("狀態目前為未確認");
+  //   // console.log("狀態目前為未確認");
+  //   editConfirmOrderList(orderId);
+  // }
+  // if (confirmOrderBtn === "confirmOrderBtn" && paidStatus == "true") {
+  //   // alert("狀態目前為已確認");
+  //   // console.log("狀態目前為已確認");
+  //   editOrderList(orderId);
+  // }
+  // if (deleteOrderBtn === "delSingleOrder-Btn") {
+  //   // console.log(orderId);
+  //   // alert("點擊到刪除訂單按鈕");
+  //   deleteOrderItem(orderId);
+  // }
   if (confirmOrderBtn === "confirmOrderBtn" && paidStatus == "false") {
     // alert("狀態目前為未確認");
     // console.log("狀態目前為未確認");
     editConfirmOrderList(orderId);
-  }
-  if (confirmOrderBtn === "confirmOrderBtn" && paidStatus == "true") {
+    return;
+  } else if (confirmOrderBtn === "confirmOrderBtn" && paidStatus == "true") {
     // alert("狀態目前為已確認");
     // console.log("狀態目前為已確認");
     editOrderList(orderId);
+    return;
   }
-  if (deleteOrderBtn === "delSingleOrder-Btn") {
-    // console.log(orderId);
-    // alert("點擊到刪除訂單按鈕");
-    deleteOrderItem(orderId);
-  }
+  // console.log(orderId);
+  // alert("點擊到刪除訂單按鈕");
+  deleteOrderItem(orderId);
 });
 
 // 修改訂單狀態(已確認)
@@ -276,36 +288,32 @@ function editOrderList(orderId) {
 
 // 刪除特定訂單
 function deleteOrderItem(orderId) {
-  axios
-    .delete(`${OrderUrl}/${orderId}`, token)
-    .then(function (response) {
-      // alert("刪除特定訂單成功");
-      swal("成功!", "刪除特定訂單成功", "success");
-      // console.log(orderData);
-      // 執行函式
-      getOrderList();
-    });
+  axios.delete(`${OrderUrl}/${orderId}`, token).then(function (response) {
+    // alert("刪除特定訂單成功");
+    swal("成功!", "刪除特定訂單成功", "success");
+    // console.log(orderData);
+    // 執行函式
+    getOrderList();
+  });
 }
 
 // 監聽刪除全部訂單
 discardAllBtn.addEventListener("click", function (e) {
   // alert("點擊到刪除全部訂單按鈕");
-  orderData = response.data.orders;
-  // console.log(orderData);
-  // 執行函式
-  renderOrderList(orderData);
-  // deleteAllOrder();
+  deleteAllOrder();
 });
 
 // 刪除全部訂單
 function deleteAllOrder() {
-  axios
-    .delete(OrderUrl, token)
-    .then(function (response) {
-      // alert("刪除全部訂單成功");
-      swal("成功!", "刪除全部訂單成功", "success");
-      getOrderList();
-    });
+  axios.delete(OrderUrl, token).then(function (response) {
+    // alert("刪除全部訂單成功");
+    swal("成功!", "刪除全部訂單成功", "success");
+    orderData = response.data.orders;
+    // console.log(orderData);
+    // 執行函式
+    renderOrderList(orderData);
+    // getOrderList();
+  });
 }
 
 init();
