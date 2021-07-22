@@ -2,13 +2,13 @@
 // console.log(token);
 
 // 前台產品列表
-const productUrl = `https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${apiPath}/products`;
+const productUrl = `https://livejs-api.hexschool.io/api/livejs/v1/customer/${apiPath}/products`;
 // 前台購物車列表
-const cartListUrl = `https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${apiPath}/carts`;
+const cartListUrl = `https://livejs-api.hexschool.io/api/livejs/v1/customer/${apiPath}/carts`;
 // 前台增加訂單列表
-const addOrderUrl = `https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${apiPath}/orders`;
+const addOrderUrl = `https://livejs-api.hexschool.io/api/livejs/v1/customer/${apiPath}/orders`;
 // 後臺訂單
-const orderUrl = `https://hexschoollivejs.herokuapp.com/api/livejs/v1/customer/${apiPath}/orders`;
+const orderUrl = `https://livejs-api.hexschool.io/api/livejs/v1/customer/${apiPath}/orders`;
 
 // 購物車相關
 let productData = [];

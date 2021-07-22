@@ -1,5 +1,5 @@
 // 後臺訂單
-const OrderUrl = `https://hexschoollivejs.herokuapp.com/api/livejs/v1/admin/${apiPath}/orders`;
+const OrderUrl = `https://livejs-api.hexschool.io/api/livejs/v1/admin/${apiPath}/orders`;
 
 // 訂單相關
 let orderData = [];
