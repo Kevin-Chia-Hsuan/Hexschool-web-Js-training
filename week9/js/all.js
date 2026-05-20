@@ -18,12 +18,12 @@ let orderData = [];
 
 // 產品相關DOM
 // 產品列表ul
-const productList = document.querySelector(".productWrap");
+const productList = document.querySelector('.productWrap');
 // 產品篩選下拉框select
-const productSelect = document.querySelector(".productSelect");
+const productSelect = document.querySelector('.productSelect');
 // console.log(productList);
 // 購物車列表table
-const cartList = document.querySelector(".shoppingCart-table");
+const cartList = document.querySelector('.shoppingCart-table');
 // 刪除全部購物車按鈕a，沒辦法使用，因為渲染出來的結構沒辦法直接掛監聽，所以改為使用父元素做判斷，229行~231行
 // const discardAllBtn = document.querySelector('.discardAllBtn');
 
@@ -51,7 +51,7 @@ function getProductList() {
 
 // 產品資料渲染
 function renderProductList(data) {
-  let str = "";
+  let str = '';
   data.forEach(function (item) {
     str += `<li class="productCard">
                 <h4 class="productType">新品</h4>
@@ -100,17 +100,17 @@ function getCartList() {
     })
     .then(function () {
       // 取得每個品項的減號
-      const removeItem = document.querySelectorAll(".removeItem");
+      const removeItem = document.querySelectorAll('.removeItem');
       removeItem.forEach(function (item) {
-        item.addEventListener("click", function (e) {
-          updateCartNum("remove", e);
+        item.addEventListener('click', function (e) {
+          updateCartNum('remove', e);
         });
       });
       // 取得每個品項的加號
-      const addItem = document.querySelectorAll(".addItem");
+      const addItem = document.querySelectorAll('.addItem');
       addItem.forEach(function (item) {
-        item.addEventListener("click", function (e) {
-          updateCartNum("add", e);
+        item.addEventListener('click', function (e) {
+          updateCartNum('add', e);
         });
       });
     })
@@ -123,11 +123,11 @@ function getCartList() {
 function renderCartList(data) {
   // console.log(data.length);
   let dataLen = data.length;
-  let str = "";
+  let str = '';
   // 預設總金額為0
   let totalPrice = 0;
   if (dataLen == 0) {
-    str = `<h2>目前購物車中無任何品項</h2>`;
+    str = '<h2>目前購物車中無任何品項</h2>';
     cartList.innerHTML = str;
   } else {
     data.forEach(function (item) {
@@ -183,17 +183,17 @@ function renderCartList(data) {
 }
 
 // 監聽產品列表加入購物車
-productList.addEventListener("click", function (e) {
+productList.addEventListener('click', function (e) {
   e.preventDefault();
   // console.log(e.target.getAttribute("data-id"));
-  let addCartClass = e.target.getAttribute("class");
+  let addCartClass = e.target.getAttribute('class');
   // 如果沒點擊到按鈕就return，不執行任何程式
-  if (addCartClass !== "js-addCart") {
+  if (addCartClass !== 'js-addCart') {
     // alert("沒點擊到按鈕唷");
     return;
   }
   // 點擊按鈕後，取得該列data-id的產品id編號
-  let productId = e.target.getAttribute("data-id");
+  let productId = e.target.getAttribute('data-id');
   // console.log(productId);
   addCartItem(productId);
 });
@@ -216,7 +216,7 @@ function addCartItem(id) {
     })
     .then(function (response) {
       // alert("加入購物車成功");
-      swal("成功!", "加入購物車成功", "success");
+      swal('成功!', '加入購物車成功', 'success');
       // 取得購物車列表
       getCartList();
     })
@@ -228,7 +228,7 @@ function addCartItem(id) {
 function updateCartNum(status, e) {
   // console.log(status);
   // 取得點擊該按鈕的產品id
-  const id = e.target.getAttribute("data-id");
+  const id = e.target.getAttribute('data-id');
   // console.log(id);
   // 取得 input 的 value
   // 這個選擇器寫法對於id是數字開頭的會有問題
@@ -236,7 +236,7 @@ function updateCartNum(status, e) {
   // 或使用這種宣告寫法
   let num = Number(document.querySelector(`[id='${id}']`).value);
   // console.log(num);
-  if (status === "add") {
+  if (status === 'add') {
     num += 1;
   } else {
     num -= 1;
@@ -260,19 +260,19 @@ function updateCartNum(status, e) {
 }
 
 // 監聽產品列表刪除購物車
-cartList.addEventListener("click", function (e) {
+cartList.addEventListener('click', function (e) {
   e.preventDefault();
   // console.log(e.target);
-  let removeCartItem = e.target.getAttribute("class");
+  let removeCartItem = e.target.getAttribute('class');
   // 沒點擊到按鈕，不會取得material-icons removeCartItem的class名稱內容，則中斷
-  if (removeCartItem !== "material-icons removeCartItem") {
+  if (removeCartItem !== 'material-icons removeCartItem') {
     // console.log(cartId);
     return;
   }
   // 點擊到X按鈕，取得data-id
-  if (removeCartItem === "material-icons removeCartItem") {
+  if (removeCartItem === 'material-icons removeCartItem') {
     // console.log(removeCartItem);
-    let cartId = e.target.getAttribute("data-id");
+    let cartId = e.target.getAttribute('data-id');
     // console.log(cartId);
     deleteCartItem(cartId);
   }
@@ -285,7 +285,7 @@ function deleteCartItem(cartId) {
     .then(function (response) {
       // console.log(response);
       // alert("刪除購物車成功");
-      swal("成功!", "刪除購物車成功", "success");
+      swal('成功!', '刪除購物車成功', 'success');
       // 取得購物車列表
       // 直接使用response的資訊帶參數執行渲染購物車列表的function，減少 request
       cartListData = response.data.carts;
@@ -298,10 +298,10 @@ function deleteCartItem(cartId) {
 }
 
 // 監聽刪除全部購物車按鈕
-cartList.addEventListener("click", function (e) {
+cartList.addEventListener('click', function (e) {
   e.preventDefault();
-  let discardAllBtn = e.target.getAttribute("class");
-  if (discardAllBtn === "discardAllBtn") {
+  let discardAllBtn = e.target.getAttribute('class');
+  if (discardAllBtn === 'discardAllBtn') {
     // console.log(discardAllBtn);
     deleteAllCartList();
   }
@@ -314,7 +314,7 @@ function deleteAllCartList() {
     .delete(cartListUrl)
     .then(function (response) {
       // alert("刪除全部購物車成功");
-      swal("成功!", "刪除全部購物車成功", "success");
+      swal('成功!', '刪除全部購物車成功', 'success');
       // 取得購物車列表
       // 直接使用response的資訊帶參數執行渲染購物車列表的function，減少 request
       cartListData = response.data.carts;
@@ -328,10 +328,10 @@ function deleteAllCartList() {
 }
 
 // form表單
-const form = document.querySelector(".orderInfo-form");
+const form = document.querySelector('.orderInfo-form');
 // 監聽送出訂單按鈕
-const orderInfoBtn = document.querySelector(".orderInfo-btn");
-orderInfoBtn.addEventListener("click", function (e) {
+const orderInfoBtn = document.querySelector('.orderInfo-btn');
+orderInfoBtn.addEventListener('click', function (e) {
   e.preventDefault();
   // alert("點擊到按鈕了");
   let cartLength = cartListData.length;
@@ -340,27 +340,27 @@ orderInfoBtn.addEventListener("click", function (e) {
   // 送出訂單DOM
   // 在全域宣告的畫會取到空字串，因為在全域取值的話，代表一進來就會執行，因此當時會是空的 value，取到空字串賦予給變數，那變數就是空字串
   // 若要在全域宣告的話要將const customerName = document.querySelector("#customerName")寫在全域，監聽內寫customerName.value即可
-  const customerName = document.querySelector("#customerName").value.trim();
-  const customerPhone = document.querySelector("#customerPhone").value.trim();
-  const customerEmail = document.querySelector("#customerEmail").value.trim();
-  const customerAddress = document.querySelector("#customerAddress").value.trim();
-  const tradeWay = document.querySelector("#tradeWay").value.trim();
+  const customerName = document.querySelector('#customerName').value.trim();
+  const customerPhone = document.querySelector('#customerPhone').value.trim();
+  const customerEmail = document.querySelector('#customerEmail').value.trim();
+  const customerAddress = document.querySelector('#customerAddress').value.trim();
+  const tradeWay = document.querySelector('#tradeWay').value.trim();
   let dmPhone = `[data-message="電話"]`;
   let dmMail = `[data-message="Email"]`;
   //   console.log(customerName);
   if (cartLength == 0) {
     // alert("請加入至少一個購物車品項");
-    swal("出錯了!", "請加入至少一個購物車品項", "error");
+    swal('出錯了!', '請加入至少一個購物車品項', 'error');
     return;
   }
   if (
-    customerName == "" ||
-    customerPhone == "" ||
-    customerEmail == "" ||
-    customerAddress == ""
+    customerName == '' ||
+    customerPhone == '' ||
+    customerEmail == '' ||
+    customerAddress == ''
   ) {
     // alert("請輸入完整訂單資訊");
-    swal("出錯了!", "請輸入完整訂單資訊", "error");
+    swal('出錯了!', '請輸入完整訂單資訊', 'error');
     return;
   }
   // 驗證室內電話、手機號碼、電子信箱規則
@@ -376,23 +376,23 @@ orderInfoBtn.addEventListener("click", function (e) {
     !reMail.test(customerEmail)
   ) {
     document.querySelector(`${dmPhone}`).textContent =
-      "電話格式不正確，0X-XXXXXXXX 或 09XXXXXXXX";
+      '電話格式不正確，0X-XXXXXXXX 或 09XXXXXXXX';
     document.querySelector(`${dmMail}`).textContent =
-      "格式不正確，電子郵件地址必須包括 ( @ 和 . )";
+      '格式不正確，電子郵件地址必須包括 ( @ 和 . )';
     return;
   }
   if (!rePhone.test(customerPhone) && !reCellPhone.test(customerPhone)) {
     // alert("市內電話或手機號碼格式不正確，請重新輸入");
     document.querySelector(`${dmPhone}`).textContent =
-      "電話格式不正確，0X-XXXXXXXX 或 09XXXXXXXX";
-    document.querySelector(`${dmMail}`).textContent = "正確";
+      '電話格式不正確，0X-XXXXXXXX 或 09XXXXXXXX';
+    document.querySelector(`${dmMail}`).textContent = '正確';
     return;
   }
   if (!reMail.test(customerEmail)) {
     // alert("格式不正確，電子郵件地址必須包括 ( @ 和 . )");
     document.querySelector(`${dmMail}`).textContent =
-      "格式不正確，電子郵件地址必須包括 ( @ 和 . )";
-    document.querySelector(`${dmPhone}`).textContent = "正確";
+      '格式不正確，電子郵件地址必須包括 ( @ 和 . )';
+    document.querySelector(`${dmPhone}`).textContent = '正確';
     return;
   }
   //   alert("訂單送出成功");
@@ -418,14 +418,14 @@ function creatOrderList(item) {
     })
     .then(function (response) {
       // alert("訂單建立成功");
-      swal("成功!", "訂單建立成功", "success");
+      swal('成功!', '訂單建立成功', 'success');
       // 取得購物車列表
       getCartList();
       // 一鍵清除
       form.reset();
       // 電話、Email恢復必填資訊
-      document.querySelector(`[data-message="電話"]`).textContent = "必填";
-      document.querySelector(`[data-message="Email"]`).textContent = "必填";
+      document.querySelector(`[data-message="電話"]`).textContent = '必填';
+      document.querySelector(`[data-message="Email"]`).textContent = '必填';
     })
     .catch(function (error) {
       console.log(error);
