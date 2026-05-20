@@ -40,11 +40,12 @@ function getProductList() {
     .get(productUrl)
     .then(function (response) {
       // console.log(response.data);
-      productData = response.data.products;
+      productData = response.data.products || [];
       renderProductList(productData);
     })
     .catch(function (error) {
       console.log(error);
+      swal('出錯了!', '產品載入失敗，請重新整理頁面', 'error');
     });
 }
 
@@ -69,13 +70,13 @@ function renderProductList(data) {
 }
 
 // 產品列表篩選
-productSelect.addEventListener("change", function (e) {
+productSelect.addEventListener('change', function (e) {
   // 抓取目前下拉選單選到的value值
   let category = e.target.value;
   let newProductData = [];
   // console.log(category);
   // 如果下拉選單選到的value值是全部，則渲染全部產品列表
-  if (category == "全部") {
+  if (category == '全部') {
     newProductData = productData;
   }
   // 篩選渲染
